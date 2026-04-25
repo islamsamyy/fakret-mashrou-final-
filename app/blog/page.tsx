@@ -2,10 +2,10 @@ import BlogSearch from '@/components/blog/BlogSearch';
 import { Suspense } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
+import Image from 'next/image';
 import { SystemLog } from '@/components/blog/SystemLog';
 import { ParallaxCard } from '@/components/ui/ParallaxCard';
 import { Navbar } from '@/components/layout/Navbar';
-import { emitSystemLog } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -162,9 +162,11 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
                   
                   <div className="flex flex-col lg:flex-row items-stretch min-h-[650px]">
                     <div className="lg:w-7/12 relative overflow-hidden">
-                      <img 
-                        src={featuredBlog.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000'} 
+                      <Image
+                        src={featuredBlog.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000'}
                         alt={featuredBlog.title}
+                        width={1200}
+                        height={650}
                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-background via-background/40 to-transparent"></div>
@@ -201,7 +203,7 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
                         <div className="flex items-center gap-5">
                           <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-primary-container/30 bg-primary-container/10 flex items-center justify-center group-hover:border-primary-container transition-all duration-500 shadow-neon-sm relative">
                             {featuredBlog.author?.avatar_url ? (
-                              <img src={featuredBlog.author.avatar_url} alt="" className="w-full h-full object-cover" />
+                              <Image src={featuredBlog.author.avatar_url} alt={featuredBlog.author?.full_name || 'Author'} width={64} height={64} className="w-full h-full object-cover" />
                             ) : (
                               <span className="material-symbols-outlined text-primary-container text-3xl">shield</span>
                             )}
@@ -230,9 +232,11 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
                 <ParallaxCard key={blog.id} className="group relative flex flex-col h-full rounded-[2.5rem] overflow-hidden border border-primary-container/10 bg-surface-container-low/20 backdrop-blur-xl transition-all duration-700 hover:border-primary-container/40 hover:shadow-[0_0_80px_rgba(0,255,209,0.15)] animate-slide-up" style={{ animationDelay: `${0.4 + (idx * 0.1)}s` }}>
                   <Link href={`/blog/${blog.slug}`} className="flex flex-col h-full">
                     <div className="relative aspect-video overflow-hidden border-b border-primary-container/10">
-                      <img 
-                        src={blog.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800'} 
+                      <Image
+                        src={blog.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800'}
                         alt={blog.title}
+                        width={800}
+                        height={450}
                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-60"></div>
