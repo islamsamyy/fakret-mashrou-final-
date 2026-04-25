@@ -178,3 +178,305 @@ Incoming: []
  │ │ Cache skipped reason: (auto no cache)
  │ GET https://dqszxefplefuuovd../rest/v1/projects?select=id%2Ctit.. 400 in 246ms (cache skip)
  │ │ Cache skipped reason: (auto no cache)
+ GET /messages 200 in 1101ms (next.js: 233ms, proxy.ts: 473ms, application-code: 395ms)
+ │ GET https://dqszxefplefuuovd../auth/v1/user 200 in 107ms (cache skip)
+ │ │ Cache skipped reason: (auto no cache)
+ │ GET https://dqszxefplefuuovd../rest/v1/messages?select=*%2Csend.. 200 in 106ms (cache skip)
+ │ │ Cache skipped reason: (auto no cache)
+ GET /profile 404 in 398ms (next.js: 73ms, proxy.ts: 257ms, application-code: 68ms)
+ GET /profile 404 in 298ms (next.js: 14ms, proxy.ts: 120ms, application-code: 164ms)
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                    ...
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="ar" dir="rtl" className="inter_fe8b..." suppressHydrationWarning={true}>
+                          <head>
+                          <body className="min-h-full..." suppressHydrationWarning={true}>
+                            <ThemeProvider>
+                              <PageLoader>
+                              <div
+                                className="page-scanline"
+-                               bis_skin_checked="1"
+                              >
+                              <CyberCursor>
+                              ...
+                                <SegmentViewNode type="page" pagePath="page.tsx">
+                                  <SegmentTrieNode>
+                                  <HomePage>
+                                    <div className="bg-backgro..." dir="rtl" suppressHydrationWarning={true}>
+                                      <div
+                                        className="fixed top-0 right-0 w-[500px] h-[500px] bg-secondary-container/5 da..."
+-                                       bis_skin_checked="1"
+                                      >
+                                      <div
+                                        className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-primary-container/5 da..."
+-                                       bis_skin_checked="1"
+                                      >
+                                      <Navbar>
+                                        <header suppressHydrationWarning={true} className="fixed top-...">
+                                          <div
+                                            className="absolute inset-0 scanline opacity-[0.03] pointer-events-none"
+-                                           bis_skin_checked="1"
+                                          >
+                                          <LinkComponent href="/" className="group flex...">
+                                            <a className="group flex..." ref={function} onClick={function onClick} ...>
+                                              <img
+                                                src="/LOGO.svg"
+                                                alt="IDEA BUSINESS"
+                                                className="h-12 w-auto group-hover:opacity-80 transition-opacity durat..."
+-                                               loading="lazy"
+-                                               width="48"
+-                                               height="48"
+-                                               decoding="async"
+-                                               data-nimg="1"
+-                                               style={{color:"transparent"}}
+                                              >
+                                              <div
+                                                className="flex flex-col"
+-                                               bis_skin_checked="1"
+                                              >
+                                                <span>
+                                                <div
+                                                  className="flex items-center gap-1"
+-                                                 bis_skin_checked="1"
+                                                >
+                                          <nav>
+                                          <div
+                                            className="flex items-center gap-3 md:gap-4"
+-                                           bis_skin_checked="1"
+                                          >
+                                            <ThemeToggle>
+                                              <button onClick={function ThemeProvider[toggle]} ...>
+                                                <span>
++                                               <span
++                                                 className="absolute -bottom-8 right-0 bg-slate-900 text-white text-x..."
++                                                 suppressHydrationWarning={true}
++                                               >
+                                            ...
+                                          ...
+                                      ...
+                                ...
+                              ...
+                  ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at throwOnHydrationMismatch (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:3318:56)
+    at beginWork (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6758:918)
+    at runWithFiberInDEV (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
+    at performUnitOfWork (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9555:97)
+    at workLoopConcurrentByScheduler (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9551:58)
+    at renderRootConcurrent (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9534:71)
+    at performWorkOnRoot (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:2647:64)
+    at span (<anonymous>)
+    at ThemeToggle (file://D:/IDEA BUSINESS/.next/dev/static/chunks/_0bb16t3._.js:511:216)
+    at Navbar (file://D:/IDEA BUSINESS/.next/dev/static/chunks/_0bb16t3._.js:873:217)
+    at HomePage (app\page.tsx:141:7)
+  139 |       <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-primary-container/5 da...
+  140 |
+> 141 |       <Navbar />
+      |       ^
+  142 |
+  143 |       <main className="relative z-10">
+  144 |         {/* Hero Section */}
+ GET /projects 200 in 716ms (next.js: 70ms, proxy.ts: 427ms, application-code: 220ms)
+ GET /profile 404 in 720ms (next.js: 214ms, proxy.ts: 427ms, application-code: 78ms)
+ GET / 200 in 728ms (next.js: 146ms, proxy.ts: 431ms, application-code: 151ms)
+ GET /projects 200 in 447ms (next.js: 4ms, proxy.ts: 302ms, application-code: 141ms)
+ GET /profile 404 in 807ms (next.js: 11ms, proxy.ts: 353ms, application-code: 442ms)
+ GET /profile 404 in 875ms (next.js: 46ms, proxy.ts: 354ms, application-code: 476ms)
+ GET / 200 in 919ms (next.js: 5ms, proxy.ts: 292ms, application-code: 622ms)
+ GET / 200 in 584ms (next.js: 13ms, proxy.ts: 326ms, application-code: 245ms)
+ GET / 200 in 453ms (next.js: 7ms, proxy.ts: 153ms, application-code: 292ms)
+ GET / 200 in 464ms (next.js: 43ms, proxy.ts: 241ms, application-code: 180ms)
+ GET / 200 in 454ms (next.js: 89ms, proxy.ts: 236ms, application-code: 129ms)
+ GET /profile 404 in 378ms (next.js: 8ms, proxy.ts: 306ms, application-code: 64ms)
+ GET /opportunities 200 in 340ms (next.js: 55ms, proxy.ts: 110ms, application-code: 175ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/projects?select=*&status.. 200 in 137ms (cache skip)
+ │ │ Cache skipped reason: (auto no cache)
+ GET /opportunities/142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 1086ms (next.js: 666ms, proxy.ts: 356ms, application-code: 64ms)
+⨯ The requested resource "https://api.dicebear.com/7.x/bottts/svg?seed=%D9%87%D8%AF%D9%89" has type "image/svg+xml" but dangerouslyAllowSVG is disabled. Consider adding the "unoptimized" property to the <Image>.
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 1237ms (next.js: 46ms, proxy.ts: 1157ms, application-code: 34ms)
+⨯ Error: Invalid API Key provided: sk_test_...
+    at ignore-listed frames {
+  type: 'StripeAuthenticationError',
+  raw: {
+    message: 'Invalid API Key provided: sk_test_...',
+    type: 'invalid_request_error',
+    headers: {
+      server: 'nginx',
+      date: 'Sat, 25 Apr 2026 10:21:11 GMT',
+      'content-type': 'application/json',
+      'content-length': '113',
+      connection: 'keep-alive',
+      'access-control-allow-credentials': 'true',
+      'access-control-allow-methods': 'GET, HEAD, PUT, PATCH, POST, DELETE',
+      'access-control-allow-origin': '*',
+      'access-control-expose-headers': 'Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required',
+      'access-control-max-age': '300',
+      'cache-control': 'no-cache, no-store',
+      'content-security-policy': "base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests",
+      vary: 'Origin',
+      'www-authenticate': 'Bearer realm="Stripe"',
+      'x-robots-tag': 'none',
+      'x-wc': '383',
+      'strict-transport-security': 'max-age=63072000; includeSubDomains; preload'
+    },
+    statusCode: 401,
+    requestId: undefined
+  },
+  rawType: 'invalid_request_error',
+  code: undefined,
+  doc_url: undefined,
+  param: undefined,
+  detail: undefined,
+  headers: {
+    server: 'nginx',
+    date: 'Sat, 25 Apr 2026 10:21:11 GMT',
+    'content-type': 'application/json',
+    'content-length': '113',
+    connection: 'keep-alive',
+    'access-control-allow-credentials': 'true',
+    'access-control-allow-methods': 'GET, HEAD, PUT, PATCH, POST, DELETE',
+    'access-control-allow-origin': '*',
+    'access-control-expose-headers': 'Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required',
+    'access-control-max-age': '300',
+    'cache-control': 'no-cache, no-store',
+    'content-security-policy': "base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests",
+    vary: 'Origin',
+    'www-authenticate': 'Bearer realm="Stripe"',
+    'x-robots-tag': 'none',
+    'x-wc': '383',
+    'strict-transport-security': 'max-age=63072000; includeSubDomains; preload'
+  },
+  requestId: undefined,
+  statusCode: 401,
+  userMessage: undefined,
+  charge: undefined,
+  decline_code: undefined,
+  payment_intent: undefined,
+  payment_method: undefined,
+  payment_method_type: undefined,
+  setup_intent: undefined,
+  source: undefined,
+  digest: '20560079'
+}
+ POST /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 500 in 2.3s (next.js: 5ms, proxy.ts: 1334ms, application-code: 973ms)
+  └─ ƒ createStripeSession("142e6bd0-000a-4252-99aa-7b0d339ae064", 50000, "SAC") in 904ms app/checkout/actions.ts
+ │ GET https://dqszxefplefuuovd../auth/v1/user 200 in 96ms (cache skip)
+ │ │ Cache skipped reason: (fetchCache = default-no-store)
+ │ GET https://dqszxefplefuuovd../rest/v1/projects?select=title%2C.. 200 in 102ms (cache skip)
+ │ │ Cache skipped reason: (fetchCache = default-no-store)
+ │ POST https://dqszxefplefuuovd../rest/v1/investments?select=id 201 in 288ms (cache skip)
+ │ │ Cache skipped reason: (fetchCache = default-no-store)
+ │ POST https://dqszxefplefuuovd../rest/v1/messages 201 in 99ms (cache skip)
+ │ │ Cache skipped reason: (fetchCache = default-no-store)
+✓ Compiled in 195ms
+ GET /projects 200 in 1524ms (next.js: 64ms, proxy.ts: 981ms, application-code: 479ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 1083ms (next.js: 109ms, proxy.ts: 784ms, application-code: 190ms)
+ GET /projects 200 in 428ms (next.js: 6ms, proxy.ts: 270ms, application-code: 152ms)
+ GET / 200 in 1566ms (next.js: 29ms, proxy.ts: 1114ms, application-code: 424ms)
+ GET / 200 in 359ms (next.js: 31ms, proxy.ts: 170ms, application-code: 159ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 394ms (next.js: 22ms, proxy.ts: 283ms, application-code: 89ms)
+ GET /projects 200 in 291ms (next.js: 4ms, proxy.ts: 130ms, application-code: 157ms)
+ GET /projects 200 in 305ms (next.js: 44ms, proxy.ts: 183ms, application-code: 78ms)
+ GET /projects 200 in 850ms (next.js: 97ms, proxy.ts: 261ms, application-code: 491ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 624ms (next.js: 113ms, proxy.ts: 384ms, application-code: 127ms)
+ GET / 200 in 894ms (next.js: 11ms, proxy.ts: 244ms, application-code: 639ms)
+ GET / 200 in 871ms (next.js: 17ms, proxy.ts: 419ms, application-code: 435ms)
+ GET / 200 in 664ms (next.js: 39ms, proxy.ts: 210ms, application-code: 415ms)
+ GET / 200 in 893ms (next.js: 120ms, proxy.ts: 429ms, application-code: 344ms)
+ GET / 200 in 555ms (next.js: 79ms, proxy.ts: 288ms, application-code: 188ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 896ms (next.js: 35ms, proxy.ts: 320ms, application-code: 541ms)
+ GET / 200 in 844ms (next.js: 7ms, proxy.ts: 136ms, application-code: 702ms)
+ GET / 200 in 767ms (next.js: 116ms, proxy.ts: 179ms, application-code: 473ms)
+ GET / 200 in 776ms (next.js: 90ms, proxy.ts: 180ms, application-code: 506ms)
+ GET / 200 in 797ms (next.js: 60ms, proxy.ts: 199ms, application-code: 538ms)
+ GET / 200 in 740ms (next.js: 299ms, proxy.ts: 196ms, application-code: 245ms)
+ GET / 200 in 771ms (next.js: 184ms, proxy.ts: 419ms, application-code: 167ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 637ms (next.js: 4ms, proxy.ts: 600ms, application-code: 33ms)
+ GET / 200 in 334ms (next.js: 8ms, proxy.ts: 142ms, application-code: 184ms)
+ GET / 200 in 324ms (next.js: 73ms, proxy.ts: 133ms, application-code: 117ms)
+✓ Compiled in 198ms
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 1530ms (next.js: 147ms, proxy.ts: 1265ms, application-code: 117ms)
+ GET /projects 200 in 755ms (next.js: 191ms, proxy.ts: 493ms, application-code: 72ms)
+ GET / 200 in 768ms (next.js: 72ms, proxy.ts: 323ms, application-code: 373ms)
+ GET / 200 in 383ms (next.js: 4ms, proxy.ts: 275ms, application-code: 104ms)
+ GET /projects 200 in 197ms (next.js: 3ms, proxy.ts: 145ms, application-code: 49ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 414ms (next.js: 4ms, proxy.ts: 256ms, application-code: 154ms)
+ GET /projects 200 in 223ms (next.js: 15ms, proxy.ts: 154ms, application-code: 54ms)
+ GET / 200 in 338ms (next.js: 29ms, proxy.ts: 169ms, application-code: 141ms)
+ GET / 200 in 254ms (next.js: 3ms, proxy.ts: 127ms, application-code: 124ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 376ms (next.js: 6ms, proxy.ts: 280ms, application-code: 90ms)
+ GET /projects 200 in 298ms (next.js: 6ms, proxy.ts: 238ms, application-code: 55ms)
+ GET / 200 in 319ms (next.js: 3ms, proxy.ts: 222ms, application-code: 94ms)
+ GET /projects 200 in 390ms (next.js: 4ms, proxy.ts: 342ms, application-code: 44ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 696ms (next.js: 29ms, proxy.ts: 635ms, application-code: 32ms)
+ GET / 200 in 556ms (next.js: 3ms, proxy.ts: 440ms, application-code: 113ms)
+ GET / 200 in 254ms (next.js: 4ms, proxy.ts: 161ms, application-code: 89ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 353ms (next.js: 4ms, proxy.ts: 327ms, application-code: 22ms)
+ GET / 200 in 536ms (next.js: 4ms, proxy.ts: 411ms, application-code: 121ms)
+ GET / 200 in 245ms (next.js: 4ms, proxy.ts: 166ms, application-code: 75ms)
+ GET / 200 in 221ms (next.js: 5ms, proxy.ts: 137ms, application-code: 79ms)
+ GET / 200 in 228ms (next.js: 3ms, proxy.ts: 136ms, application-code: 88ms)
+ GET / 200 in 346ms (next.js: 3ms, proxy.ts: 258ms, application-code: 85ms)
+ GET / 200 in 302ms (next.js: 3ms, proxy.ts: 216ms, application-code: 83ms)
+ GET / 200 in 218ms (next.js: 3ms, proxy.ts: 133ms, application-code: 82ms)
+ GET / 200 in 318ms (next.js: 4ms, proxy.ts: 210ms, application-code: 104ms)
+✓ Compiled in 206ms
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 735ms (next.js: 126ms, proxy.ts: 413ms, application-code: 196ms)
+ GET /projects 200 in 733ms (next.js: 55ms, proxy.ts: 293ms, application-code: 386ms)
+ GET /projects 200 in 334ms (next.js: 36ms, proxy.ts: 162ms, application-code: 137ms)
+ GET / 200 in 793ms (next.js: 60ms, proxy.ts: 145ms, application-code: 588ms)
+ GET / 200 in 501ms (next.js: 11ms, proxy.ts: 280ms, application-code: 210ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 582ms (next.js: 4ms, proxy.ts: 330ms, application-code: 248ms)
+ GET / 200 in 481ms (next.js: 5ms, proxy.ts: 240ms, application-code: 236ms)
+ GET / 200 in 484ms (next.js: 49ms, proxy.ts: 242ms, application-code: 193ms)
+ GET / 200 in 442ms (next.js: 11ms, proxy.ts: 332ms, application-code: 100ms)
+ GET / 200 in 751ms (next.js: 4ms, proxy.ts: 652ms, application-code: 95ms)
+✓ Compiled in 225ms
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 952ms (next.js: 297ms, proxy.ts: 401ms, application-code: 254ms)
+ GET /projects 200 in 951ms (next.js: 71ms, proxy.ts: 271ms, application-code: 609ms)
+ GET / 200 in 963ms (next.js: 149ms, proxy.ts: 275ms, application-code: 538ms)
+ GET /projects 200 in 624ms (next.js: 3ms, proxy.ts: 481ms, application-code: 140ms)
+ GET / 200 in 556ms (next.js: 7ms, proxy.ts: 459ms, application-code: 90ms)
+ GET /checkout?projectId=142e6bd0-000a-4252-99aa-7b0d339ae064 200 in 408ms (next.js: 4ms, proxy.ts: 379ms, application-code: 25ms)
+ GET / 200 in 292ms (next.js: 3ms, proxy.ts: 203ms, application-code: 86ms)
+ GET / 200 in 267ms (next.js: 4ms, proxy.ts: 175ms, application-code: 87ms)
+ GET / 200 in 259ms (next.js: 5ms, proxy.ts: 146ms, application-code: 108ms)
+ GET / 200 in 218ms (next.js: 3ms, proxy.ts: 131ms, application-code: 84ms)
+✓ Compiled in 589ms

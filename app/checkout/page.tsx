@@ -122,6 +122,14 @@ function CheckoutContent() {
           </div>
         )}
 
+        <div className="mb-8 bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6 flex items-start gap-4">
+          <span className="material-symbols-outlined text-blue-400 text-xl flex-shrink-0 mt-1">info</span>
+          <div className="flex-1">
+            <h3 className="text-blue-400 font-headline font-black mb-1 uppercase tracking-tight">وضع العرض التوضيحي</h3>
+            <p className="text-blue-400/80 text-sm font-body">أنت الآن في وضع الاختبار. بعد الموافقة والتأكيد، سيتم محاكاة عملية الدفع وستنتقل إلى صفحة النجاح مباشرة.</p>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column (Payment & Legal & Message) */}
           <div className="lg:col-span-7 space-y-8">

@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 const PLATFORM_FEE_RATE = 0.015
+const DEMO_MODE = !process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY?.startsWith('sk_test_...')
 
 export async function createStripeSession(projectId: string, amount: number, message?: string) {
   const supabase = await createClient()
@@ -65,6 +66,19 @@ export async function createStripeSession(projectId: string, amount: number, mes
 
   const platformFee = Math.round(amount * PLATFORM_FEE_RATE * 100)
   const investmentCents = Math.round(amount * 100)
+
+  // Demo mode for development/testing without Stripe
+  if (DEMO_MODE) {
+    // Update investment status to completed
+    await supabase
+      .from('investments')
+      .update({ status: 'completed' })
+      .eq('id', investment.id)
+
+    // Create success session ID for demo
+    const demoSessionId = `demo_${investment.id.slice(0, 12)}`
+    return { url: `${APP_URL}/checkout/success?session_id=${demoSessionId}` }
+  }
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
