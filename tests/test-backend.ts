@@ -10,7 +10,7 @@ import {
   validateFundingAmount,
   validateInvestmentAmount,
   sanitizeText,
-} from './lib/validation';
+} from '../lib/validation';
 
 import {
   calculateInvestorScore,
@@ -19,7 +19,7 @@ import {
   rankFounders,
   getInvestorBadges,
   getFounderBadges,
-} from './lib/leaderboard';
+} from '../lib/leaderboard';
 
 // Color codes for output
 const GREEN = '\x1b[32m';
