@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-
-const MIN_INVESTMENT = 1_000
-const MAX_INVESTMENT = 10_000_000
+import { createInvestmentSchema, parseWithErrorMessage } from '@/lib/schemas'
+import { limiterInvest, checkRateLimit } from '@/lib/rate-limit'
+import { getClientIpForRateLimit } from '@/lib/api/helpers'
 
 export async function GET() {
   const supabase = await createClient()
@@ -30,6 +30,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  // Rate limit by user ID + IP (user must be logged in)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -37,36 +38,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'يجب تسجيل الدخول أولاً' }, { status: 401 })
   }
 
-  let body: { projectId?: unknown; amount?: unknown; notes?: unknown }
+  const ip = getClientIpForRateLimit(request)
+  const identifier = `${user.id}:${ip}` // Combine user + IP for stricter limiting
+  const rateLimitCheck = await checkRateLimit(limiterInvest, identifier)
+  if (!rateLimitCheck.success) {
+    return NextResponse.json({ error: rateLimitCheck.message }, { status: 429 })
+  }
+
+  let body: unknown
   try {
     body = await request.json()
   } catch {
     return NextResponse.json({ error: 'صيغة الطلب غير صحيحة' }, { status: 400 })
   }
 
-  const { projectId, amount, notes } = body
-
-  if (!projectId || typeof projectId !== 'string') {
-    return NextResponse.json({ error: 'معرّف المشروع مطلوب' }, { status: 400 })
+  // Parse with Zod
+  const parseResult = parseWithErrorMessage(createInvestmentSchema, body)
+  if (!parseResult.success) {
+    return NextResponse.json({ error: parseResult.message }, { status: 400 })
   }
 
-  if (typeof amount !== 'number' || !Number.isFinite(amount)) {
-    return NextResponse.json({ error: 'المبلغ يجب أن يكون رقماً صحيحاً' }, { status: 400 })
-  }
-
-  if (amount < MIN_INVESTMENT) {
-    return NextResponse.json(
-      { error: `الحد الأدنى للاستثمار هو ${MIN_INVESTMENT.toLocaleString('ar-SA')} ريال` },
-      { status: 400 }
-    )
-  }
-
-  if (amount > MAX_INVESTMENT) {
-    return NextResponse.json(
-      { error: `الحد الأقصى للاستثمار هو ${MAX_INVESTMENT.toLocaleString('ar-SA')} ريال` },
-      { status: 400 }
-    )
-  }
+  const { projectId, amount, notes } = parseResult.data
 
   const { data: project, error: projectError } = await supabase
     .from('projects')
@@ -79,11 +71,17 @@ export async function POST(request: NextRequest) {
   }
 
   if (project.founder_id === user.id) {
-    return NextResponse.json({ error: 'لا يمكنك الاستثمار في مشروعك الخاص' }, { status: 403 })
+    return NextResponse.json(
+      { error: 'لا يمكنك الاستثمار في مشروعك الخاص' },
+      { status: 403 }
+    )
   }
 
   if (project.status !== 'active') {
-    return NextResponse.json({ error: 'هذا المشروع لا يقبل استثمارات جديدة' }, { status: 409 })
+    return NextResponse.json(
+      { error: 'هذا المشروع لا يقبل استثمارات جديدة' },
+      { status: 409 }
+    )
   }
 
   const { data: existing } = await supabase
@@ -106,8 +104,8 @@ export async function POST(request: NextRequest) {
       project_id: projectId,
       investor_id: user.id,
       amount,
-      status: 'pending',
-      notes: typeof notes === 'string' ? notes : null,
+      status: 'committed', // Match Investment.status type
+      notes: notes || null,
     })
     .select('id, project_id, amount, status')
     .single()
