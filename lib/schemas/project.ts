@@ -28,12 +28,17 @@ const fundingGoalSchema = z
   .min(50_000, 'الحد الأدنى للتمويل هو 50,000 ريال')
   .max(100_000_000, 'الحد الأقصى للتمويل هو 100,000,000 ريال')
 
+// URL validation: must be valid https URL
 const urlSchema = z
   .string()
-  .url('رابط غير صحيح')
-  .optional()
+  .url('الرابط يجب أن يكون URL صحيح')
+  .refine(
+    url => url.startsWith('https://'),
+    'الرابط يجب أن يكون HTTPS لأسباب أمنية'
+  )
   .or(z.literal(''))
   .transform(s => s || null)
+  .nullable()
 
 export const createProjectSchema = z.object({
   title: titleSchema,

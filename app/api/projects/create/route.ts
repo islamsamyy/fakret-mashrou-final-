@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-
-const VALIDATION_RULES = {
-  title: { minLength: 3, maxLength: 100 },
-  category: { allowed: ['fintech', 'realestate', 'ai', 'health', 'saas', 'ecommerce', 'cleantech'] as const },
-  description: { minLength: 20, maxLength: 2000 },
-  fundingGoal: { min: 50_000, max: 100_000_000 },
-}
+import { createProjectSchema, parseWithErrorMessage } from '@/lib/schemas'
+import { sanitizeUrl } from '@/lib/sanitize-security'
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
@@ -16,48 +11,33 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'يجب تسجيل الدخول أولاً' }, { status: 401 })
   }
 
-  let body: Record<string, unknown>
+  let body: unknown
   try {
     body = await request.json()
   } catch {
     return NextResponse.json({ error: 'صيغة الطلب غير صحيحة' }, { status: 400 })
   }
 
-  const title = String(body.title ?? '').trim()
-  const category = String(body.category ?? '').trim()
-  const description = String(body.description ?? '').trim()
-  const fundingGoal = Number(body.fundingGoal ?? 0)
+  // Parse with Zod (includes URL validation)
+  const parseResult = parseWithErrorMessage(createProjectSchema, {
+    title: (body as Record<string, unknown>).title,
+    description: (body as Record<string, unknown>).description,
+    category: (body as Record<string, unknown>).category,
+    fundingGoal: (body as Record<string, unknown>).fundingGoal,
+    image: (body as Record<string, unknown>).image,
+    videoUrl: (body as Record<string, unknown>).videoUrl,
+  })
 
-  const errors: string[] = []
-
-  if (title.length < VALIDATION_RULES.title.minLength) {
-    errors.push(`العنوان يجب أن يكون ${VALIDATION_RULES.title.minLength} أحرف على الأقل`)
-  }
-  if (title.length > VALIDATION_RULES.title.maxLength) {
-    errors.push(`العنوان لا يمكن أن يتجاوز ${VALIDATION_RULES.title.maxLength} حرف`)
-  }
-
-  if (!VALIDATION_RULES.category.allowed.includes(category as typeof VALIDATION_RULES.category.allowed[number])) {
-    errors.push(`القطاع غير صحيح. الخيارات: ${VALIDATION_RULES.category.allowed.join(', ')}`)
+  if (!parseResult.success) {
+    return NextResponse.json({ error: parseResult.message }, { status: 400 })
   }
 
-  if (description.length < VALIDATION_RULES.description.minLength) {
-    errors.push(`الوصف يجب أن يكون ${VALIDATION_RULES.description.minLength} حرف على الأقل`)
-  }
-  if (description.length > VALIDATION_RULES.description.maxLength) {
-    errors.push(`الوصف لا يمكن أن يتجاوز ${VALIDATION_RULES.description.maxLength} حرف`)
-  }
+  const { title, description, category, fundingGoal, image, videoUrl } =
+    parseResult.data
 
-  if (fundingGoal < VALIDATION_RULES.fundingGoal.min) {
-    errors.push(`الحد الأدنى: ${VALIDATION_RULES.fundingGoal.min.toLocaleString('ar-SA')} ريال`)
-  }
-  if (fundingGoal > VALIDATION_RULES.fundingGoal.max) {
-    errors.push(`الحد الأقصى: ${VALIDATION_RULES.fundingGoal.max.toLocaleString('ar-SA')} ريال`)
-  }
-
-  if (errors.length > 0) {
-    return NextResponse.json({ error: errors[0], errors }, { status: 400 })
-  }
+  // Double-check URL sanitization
+  const sanitizedImage = sanitizeUrl(image)
+  const sanitizedVideoUrl = sanitizeUrl(videoUrl)
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -66,7 +46,10 @@ export async function POST(request: NextRequest) {
     .single()
 
   if (profile?.kyc_status !== 'verified') {
-    return NextResponse.json({ error: 'يجب التحقق من هويتك أولاً قبل إنشاء مشروع' }, { status: 403 })
+    return NextResponse.json(
+      { error: 'يجب التحقق من هويتك أولاً قبل إنشاء مشروع' },
+      { status: 403 }
+    )
   }
 
   const { data: project, error } = await supabase
@@ -74,13 +57,13 @@ export async function POST(request: NextRequest) {
     .insert({
       title,
       category,
-      description: description.replace(/<[^>]*>/g, '').trim(),
+      description,
       funding_goal: fundingGoal,
       amount_raised: 0,
       status: 'draft',
       founder_id: user.id,
-      img: body.image || null,
-      video_url: body.videoUrl || null,
+      img: sanitizedImage,
+      video_url: sanitizedVideoUrl,
     })
     .select('id, title, category, funding_goal, status')
     .single()
