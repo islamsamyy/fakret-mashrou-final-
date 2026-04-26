@@ -3,6 +3,9 @@ import { createClient } from '@/lib/supabase/server'
 import { createInvestmentSchema, parseWithErrorMessage } from '@/lib/schemas'
 import { limiterInvest, checkRateLimit } from '@/lib/rate-limit'
 import { getClientIpForRateLimit } from '@/lib/api/helpers'
+import { successResponse, errorResponse } from '@/lib/api/response'
+import { TooManyRequests, Unauthorized, InternalServerError } from '@/lib/api/errors'
+import { createInvestment } from '@/lib/services/investment'
 
 export async function GET() {
   const supabase = await createClient()
@@ -30,116 +33,57 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  // Rate limit by user ID + IP (user must be logged in)
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    return NextResponse.json({ error: 'يجب تسجيل الدخول أولاً' }, { status: 401 })
-  }
-
-  const ip = getClientIpForRateLimit(request)
-  const identifier = `${user.id}:${ip}` // Combine user + IP for stricter limiting
-  const rateLimitCheck = await checkRateLimit(limiterInvest, identifier)
-  if (!rateLimitCheck.success) {
-    return NextResponse.json({ error: rateLimitCheck.message }, { status: 429 })
-  }
-
-  let body: unknown
   try {
-    body = await request.json()
-  } catch {
-    return NextResponse.json({ error: 'صيغة الطلب غير صحيحة' }, { status: 400 })
-  }
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
-  // Parse with Zod
-  const parseResult = parseWithErrorMessage(createInvestmentSchema, body)
-  if (!parseResult.success) {
-    return NextResponse.json({ error: parseResult.message }, { status: 400 })
-  }
+    if (!user) {
+      throw new Unauthorized()
+    }
 
-  const { projectId, amount, notes } = parseResult.data
-
-  const { data: project, error: projectError } = await supabase
-    .from('projects')
-    .select('id, title, founder_id, status')
-    .eq('id', projectId)
-    .single()
-
-  if (projectError || !project) {
-    return NextResponse.json({ error: 'المشروع غير موجود' }, { status: 404 })
-  }
-
-  if (project.founder_id === user.id) {
-    return NextResponse.json(
-      { error: 'لا يمكنك الاستثمار في مشروعك الخاص' },
-      { status: 403 }
-    )
-  }
-
-  if (project.status !== 'active') {
-    return NextResponse.json(
-      { error: 'هذا المشروع لا يقبل استثمارات جديدة' },
-      { status: 409 }
-    )
-  }
-
-  const { data: existing } = await supabase
-    .from('investments')
-    .select('id')
-    .eq('project_id', projectId)
-    .eq('investor_id', user.id)
-    .maybeSingle()
-
-  if (existing) {
-    return NextResponse.json(
-      { error: 'أنت بالفعل مستثمر في هذا المشروع' },
-      { status: 409 }
-    )
-  }
-
-  const { data: investment, error: insertError } = await supabase
-    .from('investments')
-    .insert({
-      project_id: projectId,
-      investor_id: user.id,
-      amount,
-      status: 'committed', // Match Investment.status type
-      notes: notes || null,
-    })
-    .select('id, project_id, amount, status')
-    .single()
-
-  if (insertError) {
-    // Handle unique constraint violation (23505 PostgreSQL code)
-    const isConflict =
-      insertError.code === '23505' ||
-      insertError.message?.includes('unique_investor_per_project')
-
-    if (isConflict) {
-      return NextResponse.json(
-        { error: 'أنت بالفعل مستثمر في هذا المشروع' },
-        { status: 409 }
+    // Rate limit
+    const ip = getClientIpForRateLimit(request)
+    const identifier = `${user.id}:${ip}`
+    const rateLimitCheck = await checkRateLimit(limiterInvest, identifier)
+    if (!rateLimitCheck.success) {
+      throw new TooManyRequests(
+        rateLimitCheck.message || 'تم تجاوز الحد المسموح'
       )
     }
 
-    console.error('[invest POST]', insertError)
-    return NextResponse.json({ error: 'فشل إنشاء الاستثمار' }, { status: 500 })
-  }
+    // Parse input
+    let body: unknown
+    try {
+      body = await request.json()
+    } catch {
+      throw new Error('صيغة الطلب غير صحيحة')
+    }
 
-  if (!investment) {
-    return NextResponse.json({ error: 'فشل إنشاء الاستثمار' }, { status: 500 })
-  }
+    const parseResult = parseWithErrorMessage(createInvestmentSchema, body)
+    if (!parseResult.success) {
+      throw new Error(parseResult.message)
+    }
 
-  return NextResponse.json(
-    {
-      data: {
+    // Create investment via service
+    const investment = await createInvestment(
+      { supabase, userId: user.id },
+      parseResult.data
+    )
+
+    return successResponse(
+      {
         investmentId: investment.id,
         projectId: investment.project_id,
         amount: investment.amount,
         status: investment.status,
       },
-    },
-    { status: 201 }
-  )
+      201
+    )
+  } catch (err) {
+    console.error('[invest POST]', err)
+    if (err instanceof Error && 'statusCode' in err) {
+      return errorResponse(err as any)
+    }
+    return errorResponse(new InternalServerError())
+  }
 }
