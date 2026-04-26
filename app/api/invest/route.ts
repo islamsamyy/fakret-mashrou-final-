@@ -110,8 +110,24 @@ export async function POST(request: NextRequest) {
     .select('id, project_id, amount, status')
     .single()
 
-  if (insertError || !investment) {
+  if (insertError) {
+    // Handle unique constraint violation (23505 PostgreSQL code)
+    const isConflict =
+      insertError.code === '23505' ||
+      insertError.message?.includes('unique_investor_per_project')
+
+    if (isConflict) {
+      return NextResponse.json(
+        { error: 'أنت بالفعل مستثمر في هذا المشروع' },
+        { status: 409 }
+      )
+    }
+
     console.error('[invest POST]', insertError)
+    return NextResponse.json({ error: 'فشل إنشاء الاستثمار' }, { status: 500 })
+  }
+
+  if (!investment) {
     return NextResponse.json({ error: 'فشل إنشاء الاستثمار' }, { status: 500 })
   }
 
