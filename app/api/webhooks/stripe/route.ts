@@ -3,11 +3,14 @@ import type Stripe from 'stripe'
 import { stripe } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
 import { createNotification } from '@/lib/notifications'
+import { createLogger } from '@/lib/logger'
 import {
   isWebhookEventProcessed,
   markWebhookEventProcessed,
   confirmInvestmentPayment,
 } from '@/lib/stripe-webhook'
+
+const log = createLogger('stripe-webhook')
 
 export const dynamic = 'force-dynamic'
 
@@ -44,7 +47,7 @@ export async function POST(request: Request) {
   // Check idempotency: has this event been processed?
   const alreadyProcessed = await isWebhookEventProcessed(supabase, event.id)
   if (alreadyProcessed) {
-    console.info('[stripe webhook] Event already processed, skipping:', event.id)
+    log.info({ eventId: event.id }, 'Event already processed, skipping')
     return new Response('OK', { status: 200 })
   }
 
@@ -54,7 +57,7 @@ export async function POST(request: Request) {
       const { investment_id, investor_id, project_id } = session.metadata ?? {}
 
       if (!investment_id || !investor_id || !project_id) {
-        console.warn('[stripe webhook] Missing metadata:', { investment_id, investor_id, project_id })
+        log.warn({ metadata: session.metadata }, 'Missing metadata in session')
         return new Response('Missing metadata', { status: 400 })
       }
 
@@ -71,7 +74,7 @@ export async function POST(request: Request) {
       )
 
       if (!confirmResult.success) {
-        console.error('[stripe webhook] Failed to confirm investment:', confirmResult.error)
+        log.error({ investmentId: investment_id, error: confirmResult.error }, 'Failed to confirm investment')
         return new Response('Database error', { status: 500 })
       }
 
@@ -85,7 +88,7 @@ export async function POST(request: Request) {
           '/portfolio'
         )
       } catch (notifyErr) {
-        console.warn('[stripe webhook] Notification failed:', notifyErr)
+        log.warn({ err: notifyErr }, 'Notification failed')
       }
     }
 
@@ -99,7 +102,7 @@ export async function POST(request: Request) {
 
     return new Response('OK', { status: 200 })
   } catch (err) {
-    console.error('[stripe webhook] Unhandled error:', err)
+    log.error({ err }, 'Unhandled webhook error')
     // Don't mark as processed if there was an error; let Stripe retry
     return new Response('Internal error', { status: 500 })
   }
