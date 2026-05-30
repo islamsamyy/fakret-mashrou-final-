@@ -1,0 +1,136 @@
+version: "2"
+type: frontend
+tech_stack:
+  - TypeScript
+  - Next.js 16
+  - React 19
+  - Supabase
+  - TailwindCSS
+features:
+  - name: Authentication System
+    description: User registration, login, and session management
+    files:
+      - app/api/auth/route.ts
+      - lib/auth.ts
+      - components/auth/LoginForm.tsx
+      - components/auth/RegisterForm.tsx
+    endpoints:
+      - method: POST
+        path: /api/auth/signin
+        description: User login
+        auth_required: false
+        response_schema:
+          "200": User session
+      - method: POST
+        path: /api/auth/register
+        description: User registration
+        auth_required: false
+        response_schema:
+          "200": New user account
+    depends_on:
+      - Supabase Auth
+
+  - name: Project Dashboard
+    description: Display user projects, investments, and platform statistics
+    files:
+      - app/dashboard/page.tsx
+      - components/Dashboard.tsx
+      - lib/projects.ts
+    endpoints:
+      - method: GET
+        path: /api/projects
+        description: Fetch user projects
+        auth_required: true
+        response_schema:
+          "200": Project[]
+      - method: GET
+        path: /api/investments
+        description: Fetch user investments
+        auth_required: true
+        response_schema:
+          "200": Investment[]
+    depends_on:
+      - Authentication System
+      - Supabase
+
+  - name: Project Management
+    description: Create, edit, and manage investment projects
+    files:
+      - app/projects/page.tsx
+      - components/ProjectForm.tsx
+      - lib/matching-enhanced.ts
+    endpoints:
+      - method: POST
+        path: /api/projects
+        description: Create new project
+        auth_required: true
+        request_schema:
+          body:
+            title: string
+            description: string
+            target_amount: number
+      - method: PUT
+        path: /api/projects/:id
+        description: Update project
+        auth_required: true
+    depends_on:
+      - Authentication System
+
+  - name: Investment Matching
+    description: Match investors with projects using enhanced algorithm
+    files:
+      - lib/matching-enhanced.ts
+      - app/api/matches/route.ts
+    endpoints:
+      - method: GET
+        path: /api/matches
+        description: Get matching recommendations
+        auth_required: true
+        response_schema:
+          "200": MatchResult[]
+    depends_on:
+      - Project Management
+      - Supabase
+
+  - name: User Profile
+    description: User profile management and settings
+    files:
+      - app/profile/page.tsx
+      - components/ProfileForm.tsx
+    endpoints:
+      - method: GET
+        path: /api/users/profile
+        description: Get user profile
+        auth_required: true
+      - method: PUT
+        path: /api/users/profile
+        description: Update user profile
+        auth_required: true
+    depends_on:
+      - Authentication System
+
+  - name: Payment Integration
+    description: Stripe payment processing for investments
+    files:
+      - app/api/payments/route.ts
+      - lib/stripe.ts
+    endpoints:
+      - method: POST
+        path: /api/payments/create-intent
+        description: Create payment intent
+        auth_required: true
+      - method: POST
+        path: /api/payments/webhook
+        description: Handle Stripe webhooks
+        auth_required: false
+    depends_on:
+      - Authentication System
+      - Supabase
+
+known_limitations:
+  - issue: Missing resend package in production build
+    location: lib/email.ts
+    impact: Email functionality not available
+  - issue: Investment and filter features are optional
+    location: components/
+    impact: Basic MVP functionality only

@@ -10,7 +10,8 @@
       "PowerShell(Stop-Process -Id 31604 -Force -ErrorAction SilentlyContinue)",
       "Bash(curl -s http://localhost:3000/login)",
       "Bash(ls -la scripts/)",
-      "Bash(ls -la seed*)"
+      "Bash(ls -la seed*)",
+      "Bash(grep -E \"\\\\.\\(js|ts\\)$\")"
     ]
   }
 }

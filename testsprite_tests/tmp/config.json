@@ -1,0 +1,18 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "diff",
+  "localEndpoint": "http://localhost:3000",
+  "backendAuthType": "public",
+  "executionArgs": {
+    "projectName": "arabic-platform",
+    "projectPath": "d:\\IDEA BUSINESS",
+    "testIds": [],
+    "additionalInstruction": "Focus on testing backend-frontend integration: verify API endpoints are properly connected, authentication flow works, and data flows correctly from backend to frontend",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-_EnCj1jfY1oiMOcP_Z4StihSZ4DJiXWORZE4jfetz7cT1jIapXzQ3SVhIL2hr-d4FKd27UDRY-FqgDIYkns7QppFpKe-5SzMk5vr63XPQYnf9o1cMySN1B47llXDiq933U4"
+    }
+  },
+  "serverPort": 5973
+}

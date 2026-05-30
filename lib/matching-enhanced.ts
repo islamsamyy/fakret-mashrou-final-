@@ -80,12 +80,15 @@ export function calculateMatchScore(
 
     if (investedInSimilarCategory) {
       // +50% boost for exact category match in investment history
-      investmentHistoryScore = 25 * 1.5 // 37.5, will cap at 25 later
+      investmentHistoryScore = 25 * 1.5 // 37.5 before capping
     } else if (pastProjects.some(p => projectInterests.some(pi => p.category?.includes(pi)))) {
       investmentHistoryScore = 15
     } else {
       investmentHistoryScore = 5
     }
+
+    // CAP at 25 to respect max allocation
+    investmentHistoryScore = Math.min(25, investmentHistoryScore)
   }
 
   // Factor 3: Project verification status (max 20 points)

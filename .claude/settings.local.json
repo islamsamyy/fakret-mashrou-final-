@@ -8,7 +8,13 @@
       "Bash(cmd.exe /c \"netstat -ano | findstr :3000\")",
       "Bash(cmd.exe /c \"taskkill /F /IM node.exe /T 2>nul & exit 0\")",
       "Bash(cmd.exe /c \"tasklist | findstr node\")",
-      "Bash(cmd.exe /c \"del /f /q \\\\\"d:\\\\IDEA BUSINESS\\\\.next\\\\dev\\\\server.lock\\\\\" 2>nul & del /f /q \\\\\"d:\\\\IDEA BUSINESS\\\\.next\\\\dev\\\\lock\\\\\" 2>nul & dir \\\\\"d:\\\\IDEA BUSINESS\\\\.next\\\\dev\\\\\\\\\")"
+      "Bash(cmd.exe /c \"del /f /q \\\\\"d:\\\\IDEA BUSINESS\\\\.next\\\\dev\\\\server.lock\\\\\" 2>nul & del /f /q \\\\\"d:\\\\IDEA BUSINESS\\\\.next\\\\dev\\\\lock\\\\\" 2>nul & dir \\\\\"d:\\\\IDEA BUSINESS\\\\.next\\\\dev\\\\\\\\\")",
+      "PowerShell(New-Item -ItemType Directory -Path \"d:\\\\IDEA BUSINESS\\\\archive\\\\OLD_DOCUMENTATION\" -Force)",
+      "PowerShell(New-Item -ItemType Directory -Path \"d:\\\\IDEA BUSINESS\\\\archive\\\\OLD_DOCUMENTATION\\\\status-reports\" -Force)",
+      "PowerShell(New-Item -ItemType Directory -Path \"d:\\\\IDEA BUSINESS\\\\archive\\\\OLD_DOCUMENTATION\\\\fixes-and-bugs\" -Force)",
+      "PowerShell(New-Item -ItemType Directory -Path \"d:\\\\IDEA BUSINESS\\\\archive\\\\OLD_DOCUMENTATION\\\\implementation\" -Force)",
+      "PowerShell(New-Item -ItemType Directory -Path \"d:\\\\IDEA BUSINESS\\\\archive\\\\OLD_DOCUMENTATION\\\\features\" -Force)",
+      "PowerShell(New-Item -ItemType Directory -Path \"d:\\\\IDEA BUSINESS\\\\archive\\\\OLD_DOCUMENTATION\\\\other\" -Force)"
     ]
   }
 }

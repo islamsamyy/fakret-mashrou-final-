@@ -1,58 +1,45 @@
 [
   {
     "id": "TC001",
-    "title": "Non-admin user is blocked from accessing the admin area",
-    "description": "This test verifies a non-admin user cannot access admin pages and is redirected or shown an access denied state.",
-    "category": "Admin Panel & Moderation",
+    "title": "Submit KYC documents and see pending status",
+    "description": "This test verifies that a verified user can submit KYC documents and then view the application in pending status.",
+    "category": "KYC (Know Your Customer) Verification",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to the admin area from within the app navigation"
+        "description": "Navigate to /kyc"
+      },
+      {
+        "type": "action",
+        "description": "Fill identity document details into the KYC form"
+      },
+      {
+        "type": "action",
+        "description": "Fill address document details into the KYC form"
+      },
+      {
+        "type": "action",
+        "description": "Fill tax information into the KYC form"
+      },
+      {
+        "type": "action",
+        "description": "Submit the KYC application"
       },
       {
         "type": "assertion",
-        "description": "Verify the user is blocked from viewing admin content by a redirect or an access denied state"
+        "description": "Verify the KYC application is submitted"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the application status is pending"
       }
     ],
     "priority": "High"
   },
   {
     "id": "TC002",
-    "title": "Admin can approve a KYC application",
-    "description": "This test verifies an admin can approve a pending KYC application and the application status updates to approved in the admin UI.",
-    "category": "Admin Panel & Moderation",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to the admin area from within the app navigation"
-      },
-      {
-        "type": "action",
-        "description": "Open the KYC applications section"
-      },
-      {
-        "type": "action",
-        "description": "Wait for the KYC list to load"
-      },
-      {
-        "type": "action",
-        "description": "Open a pending KYC application"
-      },
-      {
-        "type": "action",
-        "description": "Approve the KYC application"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the KYC application status is shown as approved"
-      }
-    ],
-    "priority": "High"
-  },
-  {
-    "id": "TC003",
-    "title": "Browse opportunities with category filter and trending sort",
-    "description": "Verifies a visitor can browse opportunities, apply a category filter and trending sort, and see a list of matching projects.",
+    "title": "Browse active opportunities with category and trending filters",
+    "description": "This test verifies that a user can discover active projects through the opportunities listing with filtering and sorting, and the list updates to show matching opportunities.",
     "category": "Investment Discovery & Browsing",
     "steps": [
       {
@@ -61,52 +48,31 @@
       },
       {
         "type": "action",
-        "description": "Select a valid category filter"
+        "description": "Select the AI category filter"
       },
       {
         "type": "action",
-        "description": "Select a trending sort option"
+        "description": "Select the trending sort option"
       },
       {
         "type": "action",
-        "description": "Scroll to the results section"
+        "description": "Set the results limit to 20"
       },
       {
         "type": "assertion",
-        "description": "Verify a list of opportunities is displayed"
+        "description": "Verify matching opportunities are listed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the listed opportunities reflect the selected filter criteria"
       }
     ],
     "priority": "High"
   },
   {
-    "id": "TC004",
-    "title": "Admin can view pending KYC applications list",
-    "description": "This test verifies an admin can open the admin KYC section and see a list of KYC applications including pending items.",
-    "category": "Admin Panel & Moderation",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to the admin area from within the app navigation"
-      },
-      {
-        "type": "action",
-        "description": "Open the KYC applications section"
-      },
-      {
-        "type": "action",
-        "description": "Wait for the KYC list to load"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify KYC applications are displayed with their statuses"
-      }
-    ],
-    "priority": "High"
-  },
-  {
-    "id": "TC005",
-    "title": "View an opportunity’s full details from the opportunities list",
-    "description": "Verifies a visitor can open an opportunity from the list and view its key details including founder information and funding progress.",
+    "id": "TC003",
+    "title": "View opportunity details and founder information",
+    "description": "This test verifies that a user can open an opportunity and see the full project details, founder information, AI match score, and funding progress.",
     "category": "Investment Discovery & Browsing",
     "steps": [
       {
@@ -119,184 +85,19 @@
       },
       {
         "type": "assertion",
-        "description": "Verify the opportunity details view is displayed"
+        "description": "Verify the opportunity detail view is displayed"
       },
       {
         "type": "assertion",
-        "description": "Verify founder information and funding progress are displayed"
+        "description": "Verify the project details, founder information, AI match score, and funding progress are shown"
       }
     ],
     "priority": "High"
   },
   {
-    "id": "TC006",
-    "title": "Admin can view users list with roles and KYC status",
-    "description": "This test verifies an admin can open the admin users section and see user entries including role and KYC status fields.",
-    "category": "Admin Panel & Moderation",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to the admin area from within the app navigation"
-      },
-      {
-        "type": "action",
-        "description": "Open the users management section"
-      },
-      {
-        "type": "action",
-        "description": "Wait for the users list to load"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify users are displayed with role and KYC status information"
-      }
-    ],
-    "priority": "High"
-  },
-  {
-    "id": "TC007",
-    "title": "Admin can change a user role",
-    "description": "This test verifies an admin can change a user's role and the UI reflects the updated role on the user record.",
-    "category": "Admin Panel & Moderation",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to the admin area from within the app navigation"
-      },
-      {
-        "type": "action",
-        "description": "Open the users management section"
-      },
-      {
-        "type": "action",
-        "description": "Wait for the users list to load"
-      },
-      {
-        "type": "action",
-        "description": "Open a user record from the list"
-      },
-      {
-        "type": "action",
-        "description": "Change the user's role to a different valid role"
-      },
-      {
-        "type": "action",
-        "description": "Save the role change"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the user record shows the updated role"
-      }
-    ],
-    "priority": "High"
-  },
-  {
-    "id": "TC008",
-    "title": "Update profile details and preferences from settings",
-    "description": "Verifies an authenticated user can update profile details and preferences from settings and sees the updated state reflected in the UI.",
-    "category": "User Profiles & Settings",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /login"
-      },
-      {
-        "type": "action",
-        "description": "Fill in the email field with {{LOGIN_USER}}"
-      },
-      {
-        "type": "action",
-        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
-      },
-      {
-        "type": "action",
-        "description": "Submit the login form"
-      },
-      {
-        "type": "action",
-        "description": "Click the link to open account settings"
-      },
-      {
-        "type": "action",
-        "description": "Fill in the full name field with Test User Updated"
-      },
-      {
-        "type": "action",
-        "description": "Adjust an investment preference setting"
-      },
-      {
-        "type": "action",
-        "description": "Save settings changes"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify a success confirmation is visible"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the updated profile name is shown in settings"
-      }
-    ],
-    "priority": "Medium"
-  },
-  {
-    "id": "TC009",
-    "title": "Browse opportunities with default pagination behavior",
-    "description": "Verifies the opportunities list can be extended by normal page interaction to view more results beyond the initial set.",
-    "category": "Investment Discovery & Browsing",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /opportunities"
-      },
-      {
-        "type": "action",
-        "description": "Scroll to the bottom of the opportunities list"
-      },
-      {
-        "type": "action",
-        "description": "Wait for additional results to load"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify more opportunities are displayed after scrolling"
-      }
-    ],
-    "priority": "Medium"
-  },
-  {
-    "id": "TC010",
-    "title": "Mark notifications as read from the notifications center",
-    "description": "This test verifies a logged-in user can view notifications and mark selected notifications as read and the UI reflects the updated read state.",
-    "category": "Notifications System",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to the notifications page from within the app navigation"
-      },
-      {
-        "type": "action",
-        "description": "Wait for the notifications list to load"
-      },
-      {
-        "type": "action",
-        "description": "Select one unread notification"
-      },
-      {
-        "type": "action",
-        "description": "Mark the selected notification as read"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the selected notification is shown as read in the list"
-      }
-    ],
-    "priority": "Medium"
-  },
-  {
-    "id": "TC011",
-    "title": "Discover opportunities by category from the discovery page",
-    "description": "Verifies a visitor can use the discovery page to pick a category and see relevant opportunities.",
+    "id": "TC004",
+    "title": "Save an opportunity from discovery",
+    "description": "This test verifies that a user can bookmark an opportunity and see it reflected as saved in the discovery experience.",
     "category": "Investment Discovery & Browsing",
     "steps": [
       {
@@ -305,149 +106,408 @@
       },
       {
         "type": "action",
-        "description": "Click a category to view matching opportunities"
+        "description": "Click an opportunity from the results"
+      },
+      {
+        "type": "action",
+        "description": "Save the opportunity"
       },
       {
         "type": "assertion",
-        "description": "Verify a list of opportunities for the selected category is displayed"
+        "description": "Verify the opportunity is marked as saved"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved state is visible in the discovery experience"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "View notification inbox and mark items as read",
+    "description": "This verifies that a signed-in user can open their notifications, see recent items, and mark selected notifications as read with the updated state reflected.",
+    "category": "Notifications System",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the notifications page"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the notifications list to load"
+      },
+      {
+        "type": "action",
+        "description": "Select one or more unread notifications"
+      },
+      {
+        "type": "action",
+        "description": "Mark the selected notifications as read"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the notifications are listed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected notifications are shown as read"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "View approved KYC status in profile",
+    "description": "This test verifies that after KYC approval the user can see the approved compliance status in their profile.",
+    "category": "KYC (Know Your Customer) Verification",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /kyc"
+      },
+      {
+        "type": "action",
+        "description": "Submit a valid KYC application"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the approved status to be visible in the application flow"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the profile page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the profile shows KYC approved status"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the compliance status is reflected in the user profile"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "View and update personal profile settings",
+    "description": "This verifies that a user can open their profile settings, edit personal details and preferences, and see the saved profile reflected afterward.",
+    "category": "User Profiles & Settings",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the settings page"
+      },
+      {
+        "type": "action",
+        "description": "Fill updated profile information into the editable fields"
+      },
+      {
+        "type": "action",
+        "description": "Fill updated preferences into the preferences fields"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated profile information is shown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated preferences are shown"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Send a direct message to another user",
+    "description": "This test verifies that a user can send a direct message and see it appear in the active conversation.",
+    "category": "Messaging System",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /messages"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing conversation"
+      },
+      {
+        "type": "action",
+        "description": "Fill a message into the composer"
+      },
+      {
+        "type": "action",
+        "description": "Send the message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the message appears in the conversation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the conversation updates with the new message"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Start a conversation from a project and view message history",
+    "description": "This test verifies that a user can start a direct conversation from an opportunity context and then see the conversation history in the messaging interface.",
+    "category": "Messaging System",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /opportunities"
+      },
+      {
+        "type": "action",
+        "description": "Open an opportunity detail view"
+      },
+      {
+        "type": "action",
+        "description": "Start a message conversation from the opportunity"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /messages"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the conversation appears in the message list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the message history is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC010",
+    "title": "View investor rankings on the leaderboard",
+    "description": "This verifies that users can open the leaderboard and see investor rankings with performance metrics for the selected timeframe.",
+    "category": "Leaderboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the leaderboard page"
+      },
+      {
+        "type": "action",
+        "description": "Select the investor ranking view"
+      },
+      {
+        "type": "action",
+        "description": "Select the monthly timeframe"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the rankings to load"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify investor rankings are listed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify performance metrics are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC011",
+    "title": "Edit a recently sent message",
+    "description": "This test verifies that a user can edit a message within the allowed time window and see the updated content reflected in the conversation.",
+    "category": "Messaging System",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /messages"
+      },
+      {
+        "type": "action",
+        "description": "Open a conversation containing a recent message"
+      },
+      {
+        "type": "action",
+        "description": "Edit the recent message"
+      },
+      {
+        "type": "action",
+        "description": "Save the edited message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated message content is shown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the conversation reflects the edited message"
       }
     ],
     "priority": "Medium"
   },
   {
     "id": "TC012",
-    "title": "Deep-link from a notification to its related content",
-    "description": "This test verifies clicking a notification navigates the user to the related in-app content page and the destination content is displayed.",
-    "category": "Notifications System",
+    "title": "View project rankings on the leaderboard",
+    "description": "This verifies that users can switch to project rankings and see the top projects with their associated stats.",
+    "category": "Leaderboard",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to the notifications page from within the app navigation"
+        "description": "Navigate to the leaderboard page"
       },
       {
         "type": "action",
-        "description": "Wait for the notifications list to load"
+        "description": "Select the project ranking view"
       },
       {
         "type": "action",
-        "description": "Click a notification item that supports navigation"
+        "description": "Select the all-time timeframe"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the rankings to load"
       },
       {
         "type": "assertion",
-        "description": "Verify the user lands on the related content page and relevant content is displayed"
+        "description": "Verify project rankings are listed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify project stats are displayed"
       }
     ],
     "priority": "Medium"
   },
   {
     "id": "TC013",
-    "title": "Switch leaderboard between investors and projects",
-    "description": "This test verifies a user can switch the leaderboard view between investors and projects and each view shows ranked results.",
-    "category": "Leaderboard",
+    "title": "Handle invalid discovery filters",
+    "description": "This test verifies that selecting an unsupported category filter does not return a normal opportunity list and the user is shown an invalid filter state.",
+    "category": "Investment Discovery & Browsing",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to the leaderboard page"
+        "description": "Navigate to /discover"
       },
       {
         "type": "action",
-        "description": "Select the investors leaderboard type"
+        "description": "Select an unsupported category filter"
       },
       {
         "type": "action",
-        "description": "Wait for the investors rankings to load"
-      },
-      {
-        "type": "action",
-        "description": "Select the projects leaderboard type"
+        "description": "Apply the filter"
       },
       {
         "type": "assertion",
-        "description": "Verify ranked entries are displayed for the selected leaderboard type"
+        "description": "Verify the discovery results are not shown as a normal opportunity list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an invalid filter state is shown"
       }
     ],
-    "priority": "Medium"
+    "priority": "Low"
   },
   {
     "id": "TC014",
-    "title": "View KYC status from settings/profile area",
-    "description": "Verifies an authenticated user can see their current KYC status displayed in the account settings or profile area.",
+    "title": "View another user's public profile without private details",
+    "description": "This verifies that a visitor can open a public profile page and see only publicly available information.",
     "category": "User Profiles & Settings",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to /login"
+        "description": "Navigate to a public profile page"
       },
       {
         "type": "action",
-        "description": "Fill in the email field with {{LOGIN_USER}}"
-      },
-      {
-        "type": "action",
-        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
-      },
-      {
-        "type": "action",
-        "description": "Submit the login form"
-      },
-      {
-        "type": "action",
-        "description": "Click the link to open account settings"
+        "description": "Wait for the profile to load"
       },
       {
         "type": "assertion",
-        "description": "Verify the user's KYC status is displayed"
+        "description": "Verify the public profile information is shown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify private account details are not shown"
       }
     ],
-    "priority": "Medium"
+    "priority": "Low"
   },
   {
     "id": "TC015",
-    "title": "View trending projects from the trending page",
-    "description": "Verifies a visitor can open the trending page and see a ranked or highlighted list of popular opportunities.",
-    "category": "Investment Discovery & Browsing",
+    "title": "Reject malformed profile information",
+    "description": "This verifies that invalid profile input is blocked and the user is shown validation feedback instead of saving bad data.",
+    "category": "User Profiles & Settings",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to /trending"
+        "description": "Navigate to the settings page"
+      },
+      {
+        "type": "action",
+        "description": "Fill malformed profile information into the relevant field"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
       },
       {
         "type": "assertion",
-        "description": "Verify trending opportunities are displayed"
+        "description": "Verify a validation error is shown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the profile changes are not saved"
       }
     ],
-    "priority": "Medium"
+    "priority": "Low"
   },
   {
     "id": "TC016",
-    "title": "View notifications list as an authenticated user",
-    "description": "This test verifies a logged-in user can open the notifications center and see a list or an empty state without errors.",
-    "category": "Notifications System",
+    "title": "Reject unsupported KYC document types",
+    "description": "This test verifies that the KYC form blocks unsupported file types and shows an error state instead of accepting the application.",
+    "category": "KYC (Know Your Customer) Verification",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to the notifications page from within the app navigation"
+        "description": "Navigate to /kyc"
       },
       {
         "type": "action",
-        "description": "Wait for the notifications list to load"
+        "description": "Fill the KYC form with unsupported document file types"
+      },
+      {
+        "type": "action",
+        "description": "Submit the KYC application"
       },
       {
         "type": "assertion",
-        "description": "Verify notifications are displayed or an empty state message is visible"
+        "description": "Verify the KYC submission is rejected"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an unsupported file type error state is shown"
       }
     ],
-    "priority": "Medium"
+    "priority": "Low"
   },
   {
     "id": "TC017",
-    "title": "Mark all notifications as read",
-    "description": "This test verifies a logged-in user can mark all notifications as read and the notifications center reflects no unread items.",
+    "title": "Handle an invalid notification selection gracefully",
+    "description": "This verifies that the user sees a validation error when attempting to mark an invalid notification identifier as read and no successful read update is shown.",
     "category": "Notifications System",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to the notifications page from within the app navigation"
+        "description": "Navigate to the notifications page"
       },
       {
         "type": "action",
@@ -455,127 +515,52 @@
       },
       {
         "type": "action",
-        "description": "Mark all notifications as read"
+        "description": "Attempt to mark an invalid notification selection as read"
       },
       {
         "type": "assertion",
-        "description": "Verify there are no unread notifications indicated in the list"
+        "description": "Verify a validation error is shown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no read update is applied"
       }
     ],
-    "priority": "Medium"
+    "priority": "Low"
   },
   {
     "id": "TC018",
-    "title": "Change leaderboard period filter",
-    "description": "This test verifies a user can change the leaderboard period and see the rankings update for the chosen time range.",
-    "category": "Leaderboard",
+    "title": "Prevent editing an expired message",
+    "description": "This test verifies that a user cannot edit a message after the allowed edit window has expired and is shown an expired-window state.",
+    "category": "Messaging System",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to the leaderboard page"
+        "description": "Navigate to /messages"
       },
       {
         "type": "action",
-        "description": "Select a valid leaderboard type"
+        "description": "Open a conversation containing an older message"
       },
       {
         "type": "action",
-        "description": "Select a different valid period"
+        "description": "Attempt to edit the older message"
       },
       {
         "type": "assertion",
-        "description": "Verify ranked entries are displayed for the chosen period"
+        "description": "Verify the message cannot be edited"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an edit window expired state is shown"
       }
     ],
-    "priority": "Medium"
+    "priority": "Low"
   },
   {
     "id": "TC019",
-    "title": "View another user's public profile without exposing private fields",
-    "description": "Verifies navigating to a public profile page shows only public information and does not display private contact or restricted fields.",
-    "category": "User Profiles & Settings",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /login"
-      },
-      {
-        "type": "action",
-        "description": "Fill in the email field with {{LOGIN_USER}}"
-      },
-      {
-        "type": "action",
-        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
-      },
-      {
-        "type": "action",
-        "description": "Submit the login form"
-      },
-      {
-        "type": "action",
-        "description": "Navigate to a publicly accessible user profile page from within the app"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify public profile information is displayed"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify private or restricted profile fields are not displayed"
-      }
-    ],
-    "priority": "Medium"
-  },
-  {
-    "id": "TC020",
-    "title": "View the leaderboard",
-    "description": "Verifies a visitor can open the leaderboard page and see top projects and/or investors lists.",
-    "category": "Investment Discovery & Browsing",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /leaderboard"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify leaderboard entries are displayed"
-      }
-    ],
-    "priority": "Medium"
-  },
-  {
-    "id": "TC021",
-    "title": "Unread indicator updates after reading a notification",
-    "description": "This test verifies that after opening a notification, unread indicators update consistently in the notifications center.",
-    "category": "Notifications System",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to the notifications page from within the app navigation"
-      },
-      {
-        "type": "action",
-        "description": "Wait for the notifications list to load"
-      },
-      {
-        "type": "action",
-        "description": "Open an unread notification item"
-      },
-      {
-        "type": "action",
-        "description": "Return to the notifications list view"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the opened notification is no longer indicated as unread"
-      }
-    ],
-    "priority": "Medium"
-  },
-  {
-    "id": "TC022",
-    "title": "Leaderboard loads with a default view",
-    "description": "This test verifies the leaderboard page loads with a default type and period and displays ranked results or an empty state.",
+    "title": "Reject an unsupported leaderboard type",
+    "description": "This verifies that an invalid leaderboard type is rejected and the user sees an error state instead of rankings.",
     "category": "Leaderboard",
     "steps": [
       {
@@ -584,134 +569,19 @@
       },
       {
         "type": "action",
-        "description": "Wait for the leaderboard content to load"
+        "description": "Select an unsupported leaderboard type"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the leaderboard to update"
       },
       {
         "type": "assertion",
-        "description": "Verify ranked entries are displayed or an empty state message is visible"
-      }
-    ],
-    "priority": "Medium"
-  },
-  {
-    "id": "TC023",
-    "title": "Toggle privacy preferences and verify they persist",
-    "description": "Verifies a user can change privacy preferences in settings and the selected options persist after leaving and returning to settings.",
-    "category": "User Profiles & Settings",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /login"
-      },
-      {
-        "type": "action",
-        "description": "Fill in the email field with {{LOGIN_USER}}"
-      },
-      {
-        "type": "action",
-        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
-      },
-      {
-        "type": "action",
-        "description": "Submit the login form"
-      },
-      {
-        "type": "action",
-        "description": "Click the link to open account settings"
-      },
-      {
-        "type": "action",
-        "description": "Toggle a privacy preference setting"
-      },
-      {
-        "type": "action",
-        "description": "Save settings changes"
-      },
-      {
-        "type": "action",
-        "description": "Click to navigate away to another in-app page"
-      },
-      {
-        "type": "action",
-        "description": "Click the link to open account settings"
+        "description": "Verify an error state is shown"
       },
       {
         "type": "assertion",
-        "description": "Verify the previously selected privacy preference is still enabled"
-      }
-    ],
-    "priority": "Low"
-  },
-  {
-    "id": "TC024",
-    "title": "Open leaderboard entry to view details",
-    "description": "This test verifies a user can open a leaderboard entry and reach a relevant detail view or profile view for that entry.",
-    "category": "Leaderboard",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to the leaderboard page"
-      },
-      {
-        "type": "action",
-        "description": "Select a valid leaderboard type"
-      },
-      {
-        "type": "action",
-        "description": "Wait for ranked entries to load"
-      },
-      {
-        "type": "action",
-        "description": "Click a ranked entry"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify a corresponding detail view or profile view is displayed"
-      }
-    ],
-    "priority": "Low"
-  },
-  {
-    "id": "TC025",
-    "title": "Enforce validation for invalid phone number format in settings",
-    "description": "Verifies the settings form prevents saving when an invalid phone number is entered and shows a validation error.",
-    "category": "User Profiles & Settings",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /login"
-      },
-      {
-        "type": "action",
-        "description": "Fill in the email field with {{LOGIN_USER}}"
-      },
-      {
-        "type": "action",
-        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
-      },
-      {
-        "type": "action",
-        "description": "Submit the login form"
-      },
-      {
-        "type": "action",
-        "description": "Click the link to open account settings"
-      },
-      {
-        "type": "action",
-        "description": "Fill invalid text into the phone number field"
-      },
-      {
-        "type": "action",
-        "description": "Save settings changes"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify a phone number validation error is visible"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the settings are not saved"
+        "description": "Verify no rankings are displayed"
       }
     ],
     "priority": "Low"
