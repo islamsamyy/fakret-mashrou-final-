@@ -1,170 +1,36 @@
-# 🚀 IDEA BUSINESS - Investment Platform
+# Fakret Mashrou (`fakret-mashrou-final-`) — Arabic Startup & Investor Platform
 
-A modern, full-stack investment platform connecting entrepreneurs and investors with AI-powered matching.
+A full-stack Next.js 16 and Supabase platform (`arabic-platform`) connecting founders with investors, featuring idea submissions, KYC verification, funding progress tracking, leaderboards, and Stripe checkout.
 
-**Status**: ✅ PRODUCTION READY  
-**Last Updated**: April 24, 2026  
+## Executive Summary & Purpose
+`fakret-mashrou-final-` enables entrepreneurs to pitch business ideas, track funding milestones, and connect with verified investors. It includes rate-limited APIs (`@upstash/ratelimit`), structured logging (`pino`), and interactive analytics (`recharts`).
 
----
+## Core Functionality & Features
+- **Founder & Investor Flows**: Dedicated portals (`/for-founders`, `/for-investors`, `/investors`), idea submission (`/add-idea`), discovery (`/discover`), and `/leaderboard`.
+- **Trust & Compliance**: `/kyc` verification and `/funding-progress` tracking.
+- **Payments & Analytics**: Stripe `/checkout`, `recharts` visualizations, `@vercel/analytics`, and `@vercel/speed-insights`.
+- **Content & Admin**: `/blog`, `/about`, `/how-it-works`, `/contact`, `/dashboard`, and `/admin`.
 
-## 🎯 Quick Start
+## Architecture & Tech Stack
+- **Framework**: Next.js 16 (`16.2.3`) App Router & React 19 (`19.2.4`)
+- **Backend & Security**: Supabase (`@supabase/ssr`), `@upstash/ratelimit`, `isomorphic-dompurify`, `zod`
+- **Payments & Logging**: `stripe`, `pino`, `pino-pretty`
+- **UI**: `@base-ui/react`, `shadcn`, `recharts`, `sonner`, Tailwind CSS 4
+- **Testing**: Playwright (`@playwright/test`)
 
-### For Deployment
-See complete deployment guide:
-```
-docs/deployment/DEPLOYMENT_NOW.txt
-```
+## Getting Started
 
-**3 quick steps to production:**
-1. Add Vercel environment variables (5 min)
-2. Database migrations ✅ (done)
-3. Deploy & verify (20 min)
-
-### For Development
 ```bash
+git clone https://github.com/islamsamyy/fakret-mashrou-final-.git
+cd fakret-mashrou-final-
 npm install
 npm run dev
-# Open http://localhost:3000
 ```
 
----
-
-## 📋 Project Overview
-
-**Tech Stack**: Next.js 16.2.3 | React | TypeScript | Supabase | Vercel
-
-### ✅ Features
-- User authentication (email/password)
-- Investor & founder dashboards
-- Project discovery with smart matching
-- Investment management
-- KYC verification workflow
-- Real-time notifications
-- Multi-language (Arabic/English)
-- Light theme UI + RTL support
-
----
-
-## 📂 Documentation
-
-All documentation is organized in the `docs/` folder:
-
-### Deployment Guides
-- **`docs/deployment/DEPLOYMENT_NOW.txt`** - Quick 40-minute guide (START HERE)
-- **`docs/deployment/PRODUCTION_DEPLOYMENT_SUMMARY.md`** - Complete overview
-- **`docs/deployment/APPLY_MIGRATIONS.md`** - Database migration instructions
-- **`docs/deployment/DEPLOYMENT_CHECKLIST.md`** - Pre-flight checklist
-
-### Feature Guides
-- **`docs/guides/BACKEND_FIX_SUMMARY.md`** - All bugs fixed
-- **`docs/guides/PRODUCTION_READY.md`** - Official approval status
-
-### Test Reports
-- **`docs/testing/FRONTEND_TEST_REPORT.md`** - 35+ frontend tests
-- **`docs/testing/FINAL_TEST_REPORT.md`** - Backend test analysis
-
-### Main Guides
-- **`docs/README.md`** - Complete documentation index
-- **`CLAUDE.md`** - Project instructions
-
----
-
-## 🚀 Deployment Status
-
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Code | ✅ Ready | Committed to main branch |
-| Tests | ✅ Ready | 35+ frontend tests created |
-| Database | ✅ Ready | 5 migrations applied |
-| Env Variables | ⏳ Pending | Ready to add to Vercel |
-| Deployment | ⏳ Ready | Code pushed, awaiting deploy |
-| Verification | ⏳ Pending | Ready to test |
-
----
-
-## 📁 Project Structure
-
-```
-app/                      # Next.js pages & API routes
-components/               # React components
-hooks/                    # Custom React hooks
-lib/                      # Utilities & helpers
-public/                   # Static assets
-migrations/               # Database migrations
-testsprite_tests/         # Frontend test suite
-docs/                     # Complete documentation
-├── deployment/           # Deployment guides
-├── guides/              # Feature guides
-└── testing/             # Test reports
-CLAUDE.md                 # Project instructions
-```
-
----
-
-## 🔒 Security Features
-
-✅ HTTPS/TLS Encryption  
-✅ XSS Protection (React escaping)  
-✅ SQL Injection Prevention (Supabase ORM)  
-✅ CSRF Protection  
-✅ Rate Limiting  
-✅ Input Validation  
-✅ Password Hashing (Supabase Auth)  
-✅ Row-Level Security (RLS)  
-✅ Audit Logging  
-
----
-
-## 📊 Performance Targets
-
-- Homepage load: < 2 seconds
-- API response p95: < 500ms
-- Error rate: < 1%
-- Uptime: > 99.9%
-
----
-
-## 🐛 Bug Fixes
-
-All 16 reported bugs have been fixed:
-✅ Weak password validation  
-✅ Full name validation (allow numbers)  
-✅ Error handling improvements  
-✅ Supabase error detection  
-✅ And 12 more fixes  
-
-See: `docs/guides/BACKEND_FIX_SUMMARY.md`
-
----
-
-## 📞 Support
-
-### For Deployment Issues
-→ See: `docs/deployment/DEPLOYMENT_IN_PROGRESS.md`
-
-### For Testing Issues
-→ See: `docs/testing/FRONTEND_TEST_REPORT.md`
-
-### For Database Issues
-→ See: `docs/deployment/APPLY_MIGRATIONS.md`
-
----
-
-## 🔗 Links
-
-- **GitHub Repository**: https://github.com/islamsamyy/fakrt-mashrou-
-- **Vercel Dashboard**: https://vercel.com/dashboard
-- **Supabase Dashboard**: https://app.supabase.com
-
----
-
-## 🚀 Ready to Deploy?
-
-**Start here**: `docs/deployment/DEPLOYMENT_NOW.txt`
-
-Estimated time to production: **~20-30 minutes**
-
----
-
-Made with ❤️ by Islam Samy  
-**Last Updated**: April 24, 2026
+### Available Scripts
+| Command | Description |
+| :--- | :--- |
+| `npm run dev` | Start development server |
+| `npm run build` | Build production bundle |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
