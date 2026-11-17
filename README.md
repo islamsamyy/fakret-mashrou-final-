@@ -1,38 +1,57 @@
-# Fakret Mashrou (`fakret-mashrou-final-`) — Arabic Startup Pitch, KYC & Investor Matching Platform
+# Fakret Mashrou (`fakret-mashrou-final-`) — Arabic Startup Pitch, KYC & Investor Deal-Flow Platform
 
-A production-oriented Next.js 16 (`arabic-platform`) and Supabase investment marketplace enabling Arab founders to pitch validated business ideas, pass KYC verification, track funding progress, and connect with investors—protected by Upstash rate limiting, Stripe billing, and structured Pino logging.
+<p align="center">
+  <img src="./public/LOGO.svg" alt="Fakret Mashrou Logo" width="180" />
+</p>
+
+## Table of Contents
+- [Executive Summary & Business Utility](#executive-summary--business-utility)
+- [Visual Showcase (UI & Dashboards)](#visual-showcase-ui--dashboards)
+- [System Architecture & Layers](#system-architecture--layers)
+- [Data Model & Atomic Investment Guarantees](#data-model--atomic-investment-guarantees)
+- [Database Schema, Migrations & RLS](#database-schema-migrations--rls)
+- [Application Modules & API Endpoints](#application-modules--api-endpoints)
+- [Getting Started & Scripts](#getting-started--scripts)
+- [Business Value, ROI & Growth Opportunities](#business-value-roi--growth-opportunities)
 
 ---
 
-## 1. Executive Summary & Purpose
-`fakret-mashrou-final-` bridges the funding gap between early-stage MENA entrepreneurs and angel/seed investors. Founders submit structured pitches (`/add-idea`, `/projects/[id]/edit`), investors browse vetted deal flow (`/discover`, `/opportunities/[id]`, `/investors`, `/leaderboard`), and platform admins enforce trust through a dedicated KYC review pipeline (`/kyc`, `/admin/kyc`).
+## Executive Summary & Business Utility
+`fakret-mashrou-final-` (`arabic-platform`) is a production-grade Next.js 16 and Supabase startup fundraising and investor matching marketplace. Founders pitch ideas (`/add-idea`), complete identity verification (`/kyc`), and manage capital raises (`/dashboard/founder`), while investors discover vetted opportunities (`/discover`, `/opportunities/[id]`, `/leaderboard`), execute race-condition-safe investments (`/api/invest`), and track portfolios (`/dashboard/investor`)—backed by Upstash rate limiting, Stripe webhook idempotency, and structured Pino logging.
 
 ---
 
-## 2. System Architecture & Layers
+## Visual Showcase (UI & Dashboards)
+Brand identity (`public/LOGO.svg`) and key interactive surfaces:
+- **Founder & Investor Portals**: `/dashboard/founder`, `/dashboard/investor`, `/funding-progress` (Recharts visualizations)
+- **Deal Discovery & Trust**: `/discover`, `/opportunities/[id]`, `/leaderboard`, `/kyc`, `/admin/kyc`
+
+---
+
+## System Architecture & Layers
 
 ```mermaid
 flowchart TB
-    subgraph L1["1. Presentation & Visualization Layer"]
-        Public["/landing • /discover • /opportunities/[id] • /investors • /leaderboard • /funding-progress"]
-        UI["@base-ui/react + shadcn/ui + Recharts + Sonner"]
+    subgraph L1["1. Public Discovery & Visualization Layer"]
+        Pub["/landing • /discover • /opportunities/[id] • /investors • /leaderboard • /funding-progress • /pricing"]
+        UI["@base-ui/react • shadcn/ui • Recharts • Sonner"]
     end
 
-    subgraph L2["2. Dual-Role Portal & Messaging Layer"]
+    subgraph L2["2. Dual-Role Portal & KYC Layer"]
         Founder["/dashboard/founder • /add-idea • /projects/[id]/edit"]
-        Investor["/dashboard/investor • /portfolio • /messages • /notifications"]
-        KYC["/kyc & /onboarding"]
+        Investor["/dashboard/investor • /portfolio • /messages • /notifications • /kyc"]
+        Admin["/admin • /admin/kyc (KYCReviewClient) • /admin/users"]
     end
 
-    subgraph L3["3. Security, Billing & Admin Layer"]
-        Admin["/admin • /admin/kyc • /admin/users"]
-        Stripe["/checkout + /api/webhooks/stripe"]
+    subgraph L3["3. API, Matching, Billing & Security Layer"]
+        APIs["/api/invest • /api/match • /api/search • /api/projects/{create,filter} • /api/notifications/email"]
+        Stripe["/checkout + /api/webhooks/stripe (Idempotent)"]
         Sec["@upstash/ratelimit • isomorphic-dompurify • zod • pino"]
     end
 
-    subgraph L4["4. Persistence & Verification Layer"]
-        Supa["Supabase SSR + Postgres + Migrations"]
-        PW["Playwright E2E & testsprite_tests"]
+    subgraph L4["4. Atomic RPC & Persistence Layer"]
+        PG["Supabase Postgres + 33 Migrations + confirm_investment RPC"]
+        QA["Playwright E2E + testsprite_tests"]
     end
 
     L1 --> L2 --> L3 --> L4
@@ -40,42 +59,46 @@ flowchart TB
 
 | Layer | Responsibility | Key Files |
 | :--- | :--- | :--- |
-| **Marketplace & Discovery Layer** | Public deal-flow discovery, opportunity detail views, leaderboards, and funding progress charts | `app/{discover,opportunities,investors,leaderboard,funding-progress,how-it-works}/page.tsx` |
-| **Founder & Investor Workspaces** | Role-specific dashboards, idea submission/editing, portfolio tracking, real-time messaging, and notifications | `app/dashboard/{founder,investor}/page.tsx`, `app/{add-idea,messages,notifications,portfolio}/page.tsx` |
-| **Compliance & Admin Layer** | Identity verification workflow (`KYCReviewClient.tsx`) and user governance | `app/kyc/page.tsx`, `app/admin/kyc/{page,actions,KYCReviewClient}.tsx`, `app/admin/users/page.tsx` |
-| **Security, Rate-Limiting & Billing** | Upstash Redis rate limiting, XSS sanitization (`isomorphic-dompurify`), Stripe checkout/webhooks, Pino logs | `app/checkout/*`, `app/api/webhooks/stripe/route.ts` |
-| **Data & E2E QA Layer** | Supabase migrations (`migrations/`, `supabase/`) and Playwright browser test suites | `tests/`, `testsprite_tests/`, `migrations/` |
+| **Marketplace & Charts Layer** | Opportunity discovery, funding progress charts (`recharts`), leaderboards, and blog | `app/{discover,opportunities,investors,leaderboard,funding-progress}/page.tsx` |
+| **Founder & Investor Workspaces** | Role dashboards, project editing, saved deals, messaging, and notifications | `app/dashboard/{founder,investor}/page.tsx`, `app/{add-idea,messages,notifications,portfolio}/page.tsx` |
+| **API & Security Layer** | 10 route handlers protected by Upstash rate limiting, DOMPurify sanitization, and Pino structured logs | `app/api/{auth,invest,match,notifications,projects,search,webhooks}/**` |
+| **Atomic Database & RPC Layer** | Race-condition-free investment confirmation (`confirm_investment` RPC), webhook idempotency, FX rates, and audit logs | `migrations/*.sql`, `supabase/migrations/*.sql` |
+| **E2E Verification Layer** | Playwright end-to-end tests and TestSprite specs | `tests/`, `testsprite_tests/` |
 
 ---
 
-## 3. Core Functionality & Modules
-- **Founder Pitch & Lifecycle**: Submit startup concepts (`/add-idea`), edit active listings (`/projects/[id]/edit`), and monitor investor interest via `/dashboard/founder`.
-- **Investor Deal Room**: Explore opportunities (`/discover`, `/opportunities/[id]`), inspect funding milestones (`/funding-progress`), and manage holdings (`/portfolio`, `/dashboard/investor`).
-- **Trust & KYC Pipeline**: Self-service `/kyc` submission paired with `/admin/kyc` approval actions.
-- **Direct Messaging & Alerts**: Built-in `/messages` and `/notifications` keep deal discussions on-platform.
-- **Monetization**: `/pricing` & `/checkout` backed by Stripe webhook fulfillment (`/api/webhooks/stripe`).
+## Data Model & Atomic Investment Guarantees
+- **Concurrency Safety**: `20260426_create_confirm_investment_rpc.sql` and `20260426_fix_investment_race.sql` prevent double-allocation / oversubscription during concurrent investments.
+- **Webhook Idempotency**: `20260426_add_webhook_idempotency.sql` logs processed Stripe events in `stripe_webhook_events` to guarantee at-most-once billing updates.
 
 ---
 
-## 4. Project Structure
-```text
-├── app/
-│   ├── add-idea/ & projects/[id]/edit/  # Founder pitch creation & management
-│   ├── admin/                           # Admin overview, kyc review, users
-│   ├── api/webhooks/stripe/             # Stripe payment webhook handler
-│   ├── checkout/                        # Payment & success flows
-│   ├── dashboard/{founder,investor}/    # Role-based dashboards
-│   ├── discover/, opportunities/, investors/, leaderboard/, funding-progress/
-│   ├── kyc/, onboarding/, profile/[id]/
-│   └── messages/, notifications/, blog/, pricing/, contact/
-├── components/, hooks/, lib/
-├── migrations/ & supabase/              # Database schema & migrations
-└── tests/ & testsprite_tests/           # Playwright & integration tests
-```
+## Database Schema, Migrations & RLS
+33 SQL migration files across `migrations/` and `supabase/migrations/`:
+
+| Table | Purpose |
+| :--- | :--- |
+| `profiles`, `kyc_verifications`, `kyc_data` | User accounts, roles (Founder/Investor/Admin), and KYC compliance records |
+| `projects`, `investments`, `payouts`, `exchange_rates` | Startup listings, investment commitments, payout ledgers, and currency conversion |
+| `messages`, `saved_opportunities`, `notifications`, `notification_preferences`, `contact_messages` | Deal-room communications, watchlists, and alert preferences |
+| `stripe_webhook_events`, `audit_logs` | Payment idempotency and security/compliance audit trails |
 
 ---
 
-## 5. Getting Started
+## Application Modules & API Endpoints
+
+| Endpoint | Purpose |
+| :--- | :--- |
+| `/api/auth/{login,register}` & `/auth/callback` | Authentication & OAuth callback |
+| `/api/projects/create` & `/api/projects/filter` | Project submission & multi-criteria filtering |
+| `/api/invest` | Atomic investment commitment handler |
+| `/api/match` & `/api/search` | Founder-investor matching & platform search |
+| `/api/notifications/email` | Transactional notification dispatch |
+| `/api/webhooks/stripe` | Idempotent Stripe payment webhook handler |
+
+---
+
+## Getting Started & Scripts
 
 ```bash
 git clone https://github.com/islamsamyy/fakret-mashrou-final-.git
@@ -84,10 +107,15 @@ npm install
 npm run dev
 ```
 
+| Script | Command | Description |
+| :--- | :--- | :--- |
+| Dev | `npm run dev` | Start Next.js 16 dev server |
+| Build | `npm run build` | Production build |
+| Lint | `npm run lint` | Run ESLint |
+
 ---
 
-## 6. Business Value & Growth Opportunities
-- **Success-Fee & Subscription Hybrid**: Monetize via founder pitch-boost packages (`/checkout`), investor pro memberships (`/pricing`), and syndicate carry/success fees on funded deals.
-- **AI Pitch Deck & Financial Readiness Scorer**: Automatically grade submitted ideas before they appear on `/leaderboard` to protect investor deal-flow quality.
-- **Sharia-Compliant Equity & Revenue-Share Templates**: Offer standardized regional term sheets inside `/opportunities/[id]` to accelerate deal closing across MENA.
-- **Data Room Integration**: Add NDA-gated document vaults inside `/projects/[id]` for verified KYC investors only.
+## Business Value, ROI & Growth Opportunities
+- **Institutional-Grade Deal Integrity**: Atomic investment RPCs and Stripe idempotency make the platform safe for real financial transactions—not just a demo.
+- **Syndicate & Carry Monetization**: Charge platform success fees on closed rounds, featured listing fees via `/checkout`, and premium investor subscriptions (`/pricing`).
+- **Automated AI Due Diligence**: Extend `/api/match` to score pitch decks and financial projections before admin KYC review.
